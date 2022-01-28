@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Local Library</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'pollapp/style.css' %}">
+  <style type="text/css" media="all">
+    
+    .main form h1 {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    
+    .main form {
+      width: 80%;
+      padding: 25px;
+    }
+    
+    .choice {
+      font-size: 1rem;
+    }
+    
+    .main p {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .submit {
+      box-shadow: -2px 2px 2px rgba(0,0,0,.5);
+      border-radius: 6px;
+      width: 6rem;
+      height: 2rem;
+      border: none;
+      outline: none;
+      cursor: none;
+      background: #fff;
+      color: #8a0a8a;
+      transition: 0.8s all;
+    }
+
+    .submit:hover {
+      z-index: 3;
+      color: #fff;
+      background: #8a0a8a;
+      border-radius: 22px;
+      transform: translate(0px,-2px);
+      box-shadow: -5px 5px 5px rgba(0,0,0,.5);
+    }
+    .un-nav {
+      width: 70px;
+      height: 70px;
+      position: fixed;
+      top: 0;
+      right: 0;
+      color: #fff;
+      font-size: 20px;
+      z-index: 2;
+      border-radius: 0 0 0 50px;
+      background: rgba( 219, 211, 211, 0.25 );
+      box-shadow: 0 8px 12px 0 rgba( 31, 38, 135, 0.37 );
+      backdrop-filter: blur(8.0px );
+      -webkit-backdrop-filter: blur(8.0px );
+      border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    .un-nav span {
+      height: 25%;
+      width: 100%;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .un-nav span a {
+      width: 100%;
+      height: 100%;
+      padding: 10px 30px 10px 5px;
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      cursor: none;
+    }
+
+    .un-nav span a:active {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <nav class="un-nav">
+    <span><a href="/">Home</a></span>
+  </nav>
+  <div class="main">
+    {% block content %}
+    <!--
+    <h1 class="main-head">{{ question.question_text }}</h1>
+    <ul>
+      {% for choice in question.choice_set.all %}
+      <li>{{ choice.choice_text }}</li>
+      {% endfor %}
+    </ul>
+    -->
+    <form action="{% url 'pollapp:vote' question.id %}" method="post">
+      {% csrf_token %}
+      <fieldset>
+        <legend><h1>{{ question.question_text }}</h1></legend>
+        {% if error_message %}<p>
+          <strong>{{ error_message }} <span style="color:white">*</span></strong>
+        </p>
+        {% endif %}
+        {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label class="choice" for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% endfor %}
+      </fieldset>
+      <input type="submit" class="submit" value="Vote">
+    </form>
+    {% endblock %}
+  </div>
+</body>
+</html>

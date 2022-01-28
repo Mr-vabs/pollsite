@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Local Library</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'pollapp/style.css' %}">
+
+  <style type="text/css" media="all">
+  
+    .main ul {
+      width: 80%;
+    }
+
+    .main ul li {
+      font-size: 2rem;
+      padding: 30px 30px 10px 30px;
+      font-weight: bold;
+      list-style-type: circle;
+    }
+
+    .main a {
+      display: block;
+      color: black;
+      cursor: none;
+      text-decoration: none;
+    }
+
+    .main p {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="main">
+    {% block content %}
+    {% if latest_question_list %}
+    <ul>
+      {% for question in latest_question_list %}
+      <li><a href="{% url 'pollapp:detail' question.id %}">{{ question.question_text }}</a></li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>
+      No polls are available.
+    </p>
+    {% endif %}
+    {% endblock %}
+  </div>
+</body>
+</html>
